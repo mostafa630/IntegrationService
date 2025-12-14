@@ -18,10 +18,8 @@ RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 ENV ASPNETCORE_HTTP_PORTS=8080
-ENV ASPNETCORE_HTTPS_PORTS=8081
 
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IntegrationServices.dll"]
