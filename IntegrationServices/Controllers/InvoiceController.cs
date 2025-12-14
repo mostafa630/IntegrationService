@@ -8,18 +8,20 @@ namespace IntegrationServices.Controllers
     public class InvoiceController : Controller
     {
         private readonly ILogger<InvoiceController> _logger;
+        private readonly InvoiceServices _invoiceServices;
 
-        public InvoiceController(ILogger<InvoiceController> logger)
+        public InvoiceController(ILogger<InvoiceController> logger, InvoiceServices invoiceServices)
         {
             _logger = logger;
+            _invoiceServices = invoiceServices;
         }
 
         [HttpPost]
-        public IActionResult CreateInvoice([FromBody] CreateInvoiceRequestDto request)
+        public async Task<IActionResult> CreateInvoice([FromBody] CreateInvoiceRequestDto request)
         {
             try
             {
-                var newInvoice = InvoiceServices.CreateInvoice(request);
+                var newInvoice = await _invoiceServices.CreateInvoice(request);
                 return Ok(new { Message = "Invoice created successfully", InvoiceId = newInvoice.GetInvoiceId() });
             }
             catch (Exception ex)
